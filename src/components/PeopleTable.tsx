@@ -24,14 +24,19 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
   }
 
   if (queryParam) {
-    visiblePeople = visiblePeople.filter(person => 
-      person.name.toLowerCase().includes(queryParam)
-    );
+    visiblePeople = visiblePeople.filter(person => {
+      const matchesName = person.name.toLowerCase().includes(queryParam);
+      const matchesMother = person.motherName?.toLowerCase().includes(queryParam) ?? false;
+      const matchesFather = person.fatherName?.toLowerCase().includes(queryParam) ?? false;
+
+      return matchesName || matchesMother || matchesFather;
+    });
   }
 
   if (centuriesParam.length > 0) {
     visiblePeople = visiblePeople.filter(person => {
       const century = Math.ceil(person.born / 100).toString();
+
       return centuriesParam.includes(century);
     });
   }
@@ -42,7 +47,7 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
       const valueB = b[sortField as keyof Person];
 
       let comparison = 0;
-      
+
       if (typeof valueA === 'string' && typeof valueB === 'string') {
         comparison = valueA.localeCompare(valueB);
       } else if (typeof valueA === 'number' && typeof valueB === 'number') {
@@ -61,16 +66,22 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
     if (sortField !== field) {
       return { sort: field, order: null };
     }
+
     if (sortOrder !== 'desc') {
       return { sort: field, order: 'desc' };
     }
+
     return { sort: null, order: null };
   };
 
   const getSortIcon = (field: string) => {
-    if (sortField !== field) return 'fa-sort';
+    if (sortField !== field) {
+      return 'fa-sort';
+    }
+
     return sortOrder === 'desc' ? 'fa-sort-down' : 'fa-sort-up';
   };
+
   return (
     <table
       data-cy="peopleTable"

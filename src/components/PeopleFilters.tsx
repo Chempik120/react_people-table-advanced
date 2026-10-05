@@ -10,17 +10,19 @@ export const PeopleFilters = () => {
 
   function handleQueryChange(event: React.ChangeEvent<HTMLInputElement>) {
     const newSearchParams = new URLSearchParams(searchParams);
+
     if (event.target.value) {
       newSearchParams.set('query', event.target.value);
     } else {
       newSearchParams.delete('query');
     }
+
     setSearchParams(newSearchParams);
   }
 
   function getCenturyToggleParams(century: string) {
     return centuries.includes(century)
-      ? centuries.filter((c) => c !== century)
+      ? centuries.filter(c => c !== century)
       : [...centuries, century];
   }
 
@@ -29,20 +31,20 @@ export const PeopleFilters = () => {
       <p className="panel-heading">Filters</p>
 
       <p className="panel-tabs" data-cy="SexFilter">
-        <SearchLink 
-          className={classNames({ 'is-active': sex === '' })} 
+        <SearchLink
+          className={classNames({ 'is-active': sex === '' })}
           params={{ sex: null }}
         >
           All
         </SearchLink>
-        <SearchLink 
-          className={classNames({ 'is-active': sex === 'm' })} 
+        <SearchLink
+          className={classNames({ 'is-active': sex === 'm' })}
           params={{ sex: 'm' }}
         >
           Male
         </SearchLink>
-        <SearchLink 
-          className={classNames({ 'is-active': sex === 'f' })} 
+        <SearchLink
+          className={classNames({ 'is-active': sex === 'f' })}
           params={{ sex: 'f' }}
         >
           Female
@@ -69,11 +71,13 @@ export const PeopleFilters = () => {
       <div className="panel-block">
         <div className="level is-flex-grow-1 is-mobile" data-cy="CenturyFilter">
           <div className="level-left">
-           {['16', '17', '18', '19', '20'].map((century) => (
+            {['16', '17', '18', '19', '20'].map(century => (
               <SearchLink
                 key={century}
                 data-cy="century"
-                className={classNames('button mr-1', { 'is-info': centuries.includes(century) })}
+                className={classNames('button mr-1', {
+                  'is-info': centuries.includes(century),
+                })}
                 params={{ centuries: getCenturyToggleParams(century) }}
               >
                 {century}
@@ -94,7 +98,10 @@ export const PeopleFilters = () => {
       </div>
 
       <div className="panel-block">
-        <SearchLink className="button is-link is-outlined is-fullwidth" params={{ centuries: null, sex: null, query: null }}>
+        <SearchLink
+          className="button is-link is-outlined is-fullwidth"
+          params={{ centuries: null, sex: null, query: null }}
+        >
           Reset all filters
         </SearchLink>
       </div>
